@@ -2,12 +2,18 @@ import axios from "axios";
 import utils from "../utils.js";
 
 const ethToDai = async () => {
+  // this is the address we want to run the transaction from
   const fromAddress = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045";
+  // this is the token we will be spending
   const tokenIn = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
-  const tokenOut = "0x6b175474e89094c44da98b954eedeac495271d0f";
+  // this is the amount we want to spend
   const amountIn = "1000000000000000000";
+  // this is the token we want to receive
+  const tokenOut = "0x6b175474e89094c44da98b954eedeac495271d0f";
+  // this is the chain id we want to make the transaction on
   const chainId = 1;
-  const toEoa = true; // set to false if you want the funds to stay in smart wallet
+  // this flag is responsible for keeping the funds in ensowallet or transferred to "fromAddress" in the end
+  const toEoa = true;
 
   const signer = await utils.setup(chainId, fromAddress);
   const response = await axios.get(
