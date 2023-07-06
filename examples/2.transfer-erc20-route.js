@@ -11,12 +11,12 @@ const transferDaiToUsdc = async () => {
   const toEoa = true; // set to false if you want the funds to stay in smart wallet
 
   const walletResponse = await axios.get(
-    `https://shortcuts-backend-dynamic-dev.herokuapp.com/api/v1/wallet?chainId=${chainId}&fromAddress=${fromAddress}`
+    `https://api.enso.finance/api/v1/wallet?chainId=${chainId}&fromAddress=${fromAddress}`
   );
 
   const signer = await utils.setup(chainId, fromAddress);
   const response = await axios.get(
-    `https://shortcuts-backend-dynamic-dev.herokuapp.com/api/v1/shortcuts/route?chainId=${chainId}&fromAddress=${fromAddress}&slippage=300&tokenIn=${tokenIn}&tokenOut=${tokenOut}&amountIn=${amountIn}&tokenInAmountToTransfer=${amountIn}&toEoa=${toEoa}`
+    `https://api.enso.finance/api/v1/shortcuts/route?chainId=${chainId}&fromAddress=${fromAddress}&slippage=300&tokenIn=${tokenIn}&tokenOut=${tokenOut}&amountIn=${amountIn}&tokenInAmountToTransfer=${amountIn}&toEoa=${toEoa}`
   );
 
   const balanceBefore = await utils.getTokenBalance(
