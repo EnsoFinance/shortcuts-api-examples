@@ -3,18 +3,18 @@ import utils from "../utils.js";
 
 // in this example, we will transfer an erc20 to the wallet (top up) and execute a route where we spend that erc20 token
 
-const transferDaiToUsdc = async () => {
+const transferUsdcToAarbusdc = async () => {
   // this is the address we want to run the transaction from
   const fromAddress = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045";
   // this is the token we will be spending
-  const tokenIn = "0x6b175474e89094c44da98b954eedeac495271d0f";
+  const tokenIn = "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8";
   // this is the amount we want to spend
   // we will set tokenInAmountToTransfer in the url since we need to transfer this token from the eoa to the wallet first
-  const amountIn = "100000000000000000000";
+  const amountIn = "1000000000";
   // this is the token we want to receive
-  const tokenOut = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48";
+  const tokenOut = "0x625E7708f30cA75bfd92586e17077590C60eb4cD";
   // this is the chain id we want to make the transaction on
-  const chainId = 1;
+  const chainId = 42161;
   // this flag is responsible for keeping the funds in ensowallet or transferred to "fromAddress" in the end
   const toEoa = true;
 
@@ -39,12 +39,12 @@ const transferDaiToUsdc = async () => {
   );
 
   console.log(
-    `USDC balance for ${fromAddress} increased by ${
+    `aArbUSDC balance for ${fromAddress} increased by ${
       balanceAfter - balanceBefore
     }`
   );
 };
 
-transferDaiToUsdc()
+transferUsdcToAarbusdc()
   .catch((e) => console.error("🚨", e))
   .finally(() => utils.teardown());
