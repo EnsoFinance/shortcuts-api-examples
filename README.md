@@ -20,3 +20,7 @@ This repo highlights some examples of using the Enso Shortcuts API
 - Polygon (137)
 - Arbitrum One (42161)
 - Avalanche (43114)
+
+> **Note**
+> 
+> Our API leverages "standards" to solve complex defi interactions. For an overview of supported standards and their respective supported chains, please visit https://api.enso.finance/api/v1/standards
