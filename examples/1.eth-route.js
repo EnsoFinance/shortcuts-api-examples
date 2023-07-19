@@ -20,15 +20,9 @@ const ethToDai = async () => {
     `https://api.enso.finance/api/v1/shortcuts/route?chainId=${chainId}&fromAddress=${fromAddress}&tokenIn=${tokenIn}&tokenOut=${tokenOut}&amountIn=${amountIn}&toEoa=${toEoa}`
   );
 
-  const balanceBefore = await utils.getTokenBalance(
-    tokenOut,
-    await signer.getAddress()
-  );
+  const balanceBefore = await utils.getTokenBalance(tokenOut, fromAddress);
   await signer.sendTransaction(response.data.tx);
-  const balanceAfter = await utils.getTokenBalance(
-    tokenOut,
-    await signer.getAddress()
-  );
+  const balanceAfter = await utils.getTokenBalance(tokenOut, fromAddress);
 
   console.log(
     `DAI balance for ${fromAddress} increased by ${

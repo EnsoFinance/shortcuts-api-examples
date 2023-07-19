@@ -1,6 +1,6 @@
 import * as ethers from "ethers";
 
-const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
+const provider = new ethers.providers.JsonRpcProvider("http://127.0.0.1:8545");
 let snapshotId, signer;
 
 export default {
@@ -9,11 +9,16 @@ export default {
     if (parseInt(forkedChainId) !== parseInt(chainId))
       throw `Forked wrong network! Expected ${chainId} got ${forkedChainId}`;
 
+    signer = provider.getSigner(impersonateAddress);
     snapshotId = await provider.send("evm_snapshot", []);
+
     if (impersonateAddress) {
       await provider.send("anvil_impersonateAccount", [impersonateAddress]);
-      signer = new ethers.JsonRpcSigner(provider, impersonateAddress);
-    } else signer = await provider.getSigner();
+      await provider.send("anvil_setBalance", [
+        impersonateAddress,
+        ethers.constants.MaxUint256.toHexString(),
+      ]);
+    }
 
     return signer;
   },

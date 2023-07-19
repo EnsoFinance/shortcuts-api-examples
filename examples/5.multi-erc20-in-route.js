@@ -31,10 +31,7 @@ const approveBalWethTo80BAL20WETH = async () => {
     `https://api.enso.finance/api/v1/shortcuts/route?chainId=${chainId}&fromAddress=${fromAddress}&slippage=300&tokenIn=${tokensIn.join()}&tokenOut=${tokenOut}&amountIn=${amountsIn.join()}&tokenInAmountToApprove=${amountsIn.join()}&toEoa=${toEoa}`
   );
 
-  const balanceBefore = await utils.getTokenBalance(
-    tokenOut,
-    await signer.getAddress()
-  );
+  const balanceBefore = await utils.getTokenBalance(tokenOut, fromAddress);
   await utils.approveToken(
     tokensIn[0],
     walletResponse.data.address,
@@ -46,10 +43,7 @@ const approveBalWethTo80BAL20WETH = async () => {
     amountsIn[1]
   );
   await signer.sendTransaction(response.data.tx);
-  const balanceAfter = await utils.getTokenBalance(
-    tokenOut,
-    await signer.getAddress()
-  );
+  const balanceAfter = await utils.getTokenBalance(tokenOut, fromAddress);
 
   console.log(
     `B-80BAL-20WETH balance for ${fromAddress} increased by ${
