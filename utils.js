@@ -22,7 +22,13 @@ export default {
 
     return signer;
   },
-  teardown: async () => provider.send("evm_revert", [snapshotId]),
+  teardown: async () => {
+    try {
+      await provider.send("evm_revert", [snapshotId]);
+    } finally {
+      return;
+    }
+  },
   getTokenBalance: async (tokenAddress, addressToGetBalance) => {
     const erc20 = new ethers.Contract(
       tokenAddress,

@@ -12,7 +12,7 @@ const approveDaiToAdai = async () => {
   // we will set tokenInAmountToApprove in the url since we need to approve this token from the eoa to the wallet first
   const amountIn = "100000000000000000000";
   // this is the token we want to receive
-  const tokenOut = "0xfC1E690f61EFd961294b3e1Ce3313fBD8aa4f85d";
+  const tokenOut = "0x5d3a536e4d6dbd6114cc1ead35777bab948e3643";
   // this is the chain id we want to make the transaction on
   const chainId = 1;
   // this flag is responsible for keeping the funds in ensowallet or transferred to "fromAddress" in the end
@@ -24,7 +24,12 @@ const approveDaiToAdai = async () => {
 
   const signer = await utils.setup(chainId, fromAddress);
   const response = await axios.get(
-    `https://api.enso.finance/api/v1/shortcuts/route?chainId=${chainId}&fromAddress=${fromAddress}&slippage=300&tokenIn=${tokenIn}&tokenOut=${tokenOut}&amountIn=${amountIn}&tokenInAmountToApprove=${amountIn}&toEoa=${toEoa}`
+    `https://api.enso.finance/api/v1/shortcuts/route?chainId=${chainId}&fromAddress=${fromAddress}&slippage=300&tokenIn=${tokenIn}&tokenOut=${tokenOut}&amountIn=${amountIn}&tokenInAmountToApprove=${amountIn}&toEoa=${toEoa}`,
+    {
+      headers: {
+        Authorization: "Bearer 1e02632d-6feb-4a75-a157-documentation",
+      },
+    }
   );
 
   const balanceBefore = await utils.getTokenBalance(tokenOut, fromAddress);
@@ -33,7 +38,7 @@ const approveDaiToAdai = async () => {
   const balanceAfter = await utils.getTokenBalance(tokenOut, fromAddress);
 
   console.log(
-    `aDAI balance for ${fromAddress} increased by ${
+    `cDAI balance for ${fromAddress} increased by ${
       balanceAfter - balanceBefore
     }`
   );

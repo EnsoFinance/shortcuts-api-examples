@@ -24,7 +24,12 @@ const approveDaiToAdai = async () => {
   const signer = await utils.setup(chainId, safeOwner);
 
   const response = await axios.get(
-    `https://api.enso.finance/api/v1/shortcuts/route?chainId=${chainId}&fromAddress=${fromAddress}&slippage=300&tokenIn=${tokenIn}&tokenOut=${tokenOut}&amountIn=${amountIn}`
+    `https://api.enso.finance/api/v1/shortcuts/route?chainId=${chainId}&fromAddress=${fromAddress}&slippage=300&tokenIn=${tokenIn}&tokenOut=${tokenOut}&amountIn=${amountIn}`,
+    {
+      headers: {
+        Authorization: "Bearer 1e02632d-6feb-4a75-a157-documentation",
+      },
+    }
   );
 
   const balanceBefore = await utils.getTokenBalance(tokenOut, fromAddress);

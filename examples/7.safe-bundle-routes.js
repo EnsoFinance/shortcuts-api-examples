@@ -55,7 +55,12 @@ const bundleRoutes = async () => {
           tokenInAmountToTransfer: usdtAmount,
         },
       },
-    ]
+    ],
+    {
+      headers: {
+        Authorization: "Bearer 1e02632d-6feb-4a75-a157-documentation",
+      },
+    }
   );
 
   const ausdtBefore = await utils.getTokenBalance(ausdt, fromAddress);
