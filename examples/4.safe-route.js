@@ -5,7 +5,7 @@ import { EthersAdapter } from "@safe-global/protocol-kit";
 import * as ethers from "ethers";
 import { OperationType } from "@safe-global/safe-core-sdk-types";
 
-// in this example, we will approve an erc20 to the wallet and execute a route where we spend that erc20 token
+// in this example, we will execute a route via a safe wallet
 
 const approveDaiToAdai = async () => {
   // this is the (safe wallet) address we want to run the transaction from
@@ -24,7 +24,7 @@ const approveDaiToAdai = async () => {
   const signer = await utils.setup(chainId, safeOwner);
 
   const response = await axios.get(
-    `https://api.enso.finance/api/shortcuts/route?chainId=${chainId}&fromAddress=${fromAddress}&slippage=300&tokenIn=${tokenIn}&tokenOut=${tokenOut}&amountIn=${amountIn}`
+    `https://api.enso.finance/api/v1/shortcuts/route?chainId=${chainId}&fromAddress=${fromAddress}&slippage=300&tokenIn=${tokenIn}&tokenOut=${tokenOut}&amountIn=${amountIn}`
   );
 
   const balanceBefore = await utils.getTokenBalance(tokenOut, fromAddress);
