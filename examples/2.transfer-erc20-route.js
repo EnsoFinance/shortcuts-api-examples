@@ -24,19 +24,18 @@ const transferUsdcToAarbusdc = async () => {
 
   const signer = await utils.setup(chainId, fromAddress);
   const response = await axios.get(
-    `https://api.enso.finance/api/v1/shortcuts/route?chainId=${chainId}&fromAddress=${fromAddress}&slippage=300&tokenIn=${tokenIn}&tokenOut=${tokenOut}&amountIn=${amountIn}&tokenInAmountToTransfer=${amountIn}&toEoa=${toEoa}`
+    `https://api.enso.finance/api/v1/shortcuts/route?chainId=${chainId}&fromAddress=${fromAddress}&slippage=300&tokenIn=${tokenIn}&tokenOut=${tokenOut}&amountIn=${amountIn}&tokenInAmountToTransfer=${amountIn}&toEoa=${toEoa}`,
+    {
+      headers: {
+        Authorization: "Bearer 1e02632d-6feb-4a75-a157-documentation",
+      },
+    }
   );
 
-  const balanceBefore = await utils.getTokenBalance(
-    tokenOut,
-    await signer.getAddress()
-  );
+  const balanceBefore = await utils.getTokenBalance(tokenOut, fromAddress);
   await utils.transferToken(tokenIn, walletResponse.data.address, amountIn);
   await signer.sendTransaction(response.data.tx);
-  const balanceAfter = await utils.getTokenBalance(
-    tokenOut,
-    await signer.getAddress()
-  );
+  const balanceAfter = await utils.getTokenBalance(tokenOut, fromAddress);
 
   console.log(
     `aArbUSDC balance for ${fromAddress} increased by ${

@@ -19,11 +19,11 @@ const bundleRoutes = async () => {
   );
 
   const bal = "0xba100000625a3754423978a60c9317c58a424e3D";
-  const balAmount = ethers.parseEther("0.9").toString();
+  const balAmount = ethers.utils.parseEther("0.9").toString();
   const weth = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
-  const wethAmount = ethers.parseEther("10").toString();
+  const wethAmount = ethers.utils.parseEther("10").toString();
   const usdc = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48";
-  const usdcAmount = ethers.parseUnits("1000", 6).toString();
+  const usdcAmount = ethers.utils.parseUnits("1000", 6).toString();
 
   const b80bal20weth = "0x5c6Ee304399DBdB9C8Ef030aB642B10820DB8F56";
   const stecrv = "0x06325440D014e39736583c165C2963BA99fAf14E";
@@ -54,7 +54,7 @@ const bundleRoutes = async () => {
           slippage,
           tokenIn: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
           tokenOut: stecrv,
-          amountIn: ethers.parseEther("1.5").toString(),
+          amountIn: ethers.utils.parseEther("1.5").toString(),
         },
       },
       {
@@ -70,7 +70,12 @@ const bundleRoutes = async () => {
           tokenInAmountToTransfer: usdcAmount,
         },
       },
-    ]
+    ],
+    {
+      headers: {
+        Authorization: "Bearer 1e02632d-6feb-4a75-a157-documentation",
+      },
+    }
   );
 
   const b80bal20wethBefore = await utils.getTokenBalance(
