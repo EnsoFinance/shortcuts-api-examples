@@ -9,7 +9,7 @@ import { OperationType } from "@safe-global/safe-core-sdk-types";
 
 // Coming soon is the ability to use the output amount of one hop as the input for the next hop in the bundle.
 // If this is something you need for your use case, please bump the priority by contacting https://t.me/connor_enso
-const bundleRoutes = async () => {
+const bundleRoutesUsingSafe = async () => {
   // this is the (safe wallet) address we want to run the transaction from
   const fromAddress = "0x2EaC920c002c9f83f278a75b56137CFc091a1F08";
   // this is the chain id we want to make the transaction on
@@ -88,6 +88,6 @@ const bundleRoutes = async () => {
   );
 };
 
-bundleRoutes()
+bundleRoutesUsingSafe()
   .catch((e) => console.error("🚨", e))
   .finally(() => utils.teardown());
