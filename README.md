@@ -1,19 +1,40 @@
-# Shortcuts API Examples
+# Enso shortcuts API examples
 
-This repo highlights some examples of using the Enso Shortcuts API
+This repo highlights how to use Enso API for EOAs, smart accounts, and relaying transactions using 4337 bundlers.
 
-## Setup
+## Execution
+### EOAs
 
-1. Install dependencies: `npm`
-2. Install anvil: `npm run install-foundry`
+### Smart Accounts(Smart Wallets)
+Any Smart Account that enables [delegateCall](https://solidity-by-example.org/delegatecall/) is usable through Enso.  Ensuring that all state resulting from interactions result inside of the original smart wallet, and not another account.
 
-## Run examples
+#### Safe
 
-1. In one terminal, start a local test network: `npm run anvil RPC_URL`
-2. In a second terminal, run the example: `node examples/EXAMPLE_TO_RUN`
+#### Biconomy
+
+#### Thirdweb
+
+#### Patch Wallet
+
+#### Etherspot
+
+#### Generic 4337
+
+
+### Transaction Relayers
+
+#### ZeroDev
+
+#### Pimlico
+
+#### Thirdweb
+
+
+## Metadata
+
+
 
 ## Supported Chains:
-
 - Ethereum (1)
 - Optimism (10)
 - BNB Chain (56)
