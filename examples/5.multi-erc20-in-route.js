@@ -13,22 +13,27 @@ const approveBalWethTo80BAL20WETH = async () => {
     "0xba100000625a3754423978a60c9317c58a424e3D",
     "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
   ];
-  // we will set tokenInAmountToApprove in the url since we need to approve these tokens from the eoa first
+  // this is the amounts we want to spend
   const amountsIn = ["100000000000000000", "1000000000000000000"];
+  // this is the address we will transferFrom the erc20
+  // note: the spender must hold & approve the required amounts for the smart wallet
+  const spender = fromAddress;
   // this is the token we want to receive
   const tokenOut = "0x5c6Ee304399DBdB9C8Ef030aB642B10820DB8F56";
   // this is the chain id we want to make the transaction on
   const chainId = 1;
-  // this flag is responsible for keeping the funds in ensowallet or transferred to "fromAddress" in the end
-  const toEoa = true;
+  // we can set the receiver so it will be transferred out of the smart wallet
+  const receiver = fromAddress;
 
-  const walletResponse = await axios.get(
+  const {
+    data: { address: walletAddress },
+  } = await axios.get(
     `https://api.enso.finance/api/v1/wallet?chainId=${chainId}&fromAddress=${fromAddress}`
   );
 
   const signer = await utils.setup(chainId, fromAddress);
   const response = await axios.get(
-    `https://api.enso.finance/api/v1/shortcuts/route?chainId=${chainId}&fromAddress=${fromAddress}&slippage=300&tokenIn=${tokensIn.join()}&tokenOut=${tokenOut}&amountIn=${amountsIn.join()}&tokenInAmountToApprove=${amountsIn.join()}&toEoa=${toEoa}`,
+    `https://api.enso.finance/api/v1/shortcuts/route?chainId=${chainId}&fromAddress=${fromAddress}&slippage=300&tokenIn=${tokensIn.join()}&tokenOut=${tokenOut}&amountIn=${amountsIn.join()}&spender=${spender}&receiver=${receiver}`,
     {
       headers: {
         Authorization: "Bearer 1e02632d-6feb-4a75-a157-documentation",
@@ -37,16 +42,8 @@ const approveBalWethTo80BAL20WETH = async () => {
   );
 
   const balanceBefore = await utils.getTokenBalance(tokenOut, fromAddress);
-  await utils.approveToken(
-    tokensIn[0],
-    walletResponse.data.address,
-    amountsIn[0]
-  );
-  await utils.approveToken(
-    tokensIn[1],
-    walletResponse.data.address,
-    amountsIn[1]
-  );
+  await utils.approveToken(tokensIn[0], walletAddress, amountsIn[0]);
+  await utils.approveToken(tokensIn[1], walletAddress, amountsIn[1]);
   await signer.sendTransaction(response.data.tx);
   const balanceAfter = await utils.getTokenBalance(tokenOut, fromAddress);
 

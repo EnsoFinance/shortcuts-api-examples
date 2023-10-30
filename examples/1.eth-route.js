@@ -12,12 +12,12 @@ const ethToDai = async () => {
   const tokenOut = "0x6b175474e89094c44da98b954eedeac495271d0f";
   // this is the chain id we want to make the transaction on
   const chainId = 1;
-  // this flag is responsible for keeping the funds in ensowallet or transferred to "fromAddress" in the end
-  const toEoa = true;
+  // we can set the receiver so it will be transferred out of the smart wallet
+  const receiver = fromAddress;
 
   const signer = await utils.setup(chainId, fromAddress);
   const response = await axios.get(
-    `https://api.enso.finance/api/v1/shortcuts/route?chainId=${chainId}&fromAddress=${fromAddress}&tokenIn=${tokenIn}&tokenOut=${tokenOut}&amountIn=${amountIn}&toEoa=${toEoa}`,
+    `https://api.enso.finance/api/v1/shortcuts/route?chainId=${chainId}&fromAddress=${fromAddress}&tokenIn=${tokenIn}&tokenOut=${tokenOut}&amountIn=${amountIn}&receiver=${receiver}`,
     {
       headers: {
         Authorization: "Bearer 1e02632d-6feb-4a75-a157-documentation",

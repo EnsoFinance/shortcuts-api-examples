@@ -29,17 +29,19 @@ const depositAndBorrow = async () => {
     }));
   console.log("\nUsed standards:", JSON.stringify(usedStandards, null, 2));
 
-  const walletResponse = await axios.get(
+  const {
+    data: { address: walletAddress },
+  } = await axios.get(
     `https://api.enso.finance/api/v1/wallet?chainId=${chainId}&fromAddress=${fromAddress}`
   );
 
   const ausdc = "0x9ba00d6856a4edf4665bca2c2309936572473b7e";
   const aaveV2LendingPool = "0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9";
   const usdc = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48";
-  const usdcAmount = ethers.utils.parseUnits("1000", 6).toString();
+  const usdcAmount = ethers.utils.parseUnits("10", 6).toString();
 
   const dai = "0x6b175474e89094c44da98b954eedeac495271d0f";
-  const daiAmount = ethers.utils.parseEther("500").toString();
+  const daiAmount = ethers.utils.parseEther("5").toString();
 
   const signer = await utils.setup(chainId, fromAddress);
   // note the args for each *action* bundle are the inputs defined at /api/v1/standards or /api/v1/actions endpoint
@@ -53,7 +55,7 @@ const depositAndBorrow = async () => {
         action: "transferfrom",
         args: {
           sender: fromAddress,
-          recipient: walletResponse.data.address,
+          recipient: walletAddress,
           token: usdc,
           amount: usdcAmount,
         },
@@ -86,25 +88,19 @@ const depositAndBorrow = async () => {
     }
   );
 
-  const daiBefore = await utils.getTokenBalance(
-    dai,
-    walletResponse.data.address
-  );
+  const daiBefore = await utils.getTokenBalance(dai, walletAddress);
 
   // approve required tokens
-  await utils.approveToken(usdc, walletResponse.data.address, usdcAmount);
+  await utils.approveToken(usdc, walletAddress, usdcAmount);
 
   await signer.sendTransaction(response.data.tx);
 
-  const daiAfter = await utils.getTokenBalance(
-    dai,
-    walletResponse.data.address
-  );
+  const daiAfter = await utils.getTokenBalance(dai, walletAddress);
 
   console.log(
-    `DAI balance for wallet ${
-      walletResponse.data.address
-    } of ${fromAddress} increased by ${daiAfter - daiBefore}`
+    `DAI balance for wallet ${walletAddress} of ${fromAddress} increased by ${
+      daiAfter - daiBefore
+    }`
   );
 };
 
