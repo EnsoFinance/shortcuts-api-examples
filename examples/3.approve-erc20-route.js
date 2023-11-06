@@ -9,22 +9,26 @@ const approveDaiToAdai = async () => {
   // this is the token we will be spending
   const tokenIn = "0x6b175474e89094c44da98b954eedeac495271d0f";
   // this is the amount we want to spend
-  // we will set tokenInAmountToApprove in the url since we need to approve this token from the eoa to the wallet first
   const amountIn = "100000000000000000000";
+  // this is the address we will transferFrom the erc20
+  // note: the spender must hold & approve the required amount for the smart wallet
+  const spender = fromAddress;
   // this is the token we want to receive
   const tokenOut = "0x5d3a536e4d6dbd6114cc1ead35777bab948e3643";
   // this is the chain id we want to make the transaction on
   const chainId = 1;
-  // this flag is responsible for keeping the funds in ensowallet or transferred to "fromAddress" in the end
-  const toEoa = true;
+  // we can set the receiver so it will be transferred out of the smart wallet
+  const receiver = fromAddress;
 
-  const walletResponse = await axios.get(
+  const {
+    data: { address: walletAddress },
+  } = await axios.get(
     `https://api.enso.finance/api/v1/wallet?chainId=${chainId}&fromAddress=${fromAddress}`
   );
 
   const signer = await utils.setup(chainId, fromAddress);
   const response = await axios.get(
-    `https://api.enso.finance/api/v1/shortcuts/route?chainId=${chainId}&fromAddress=${fromAddress}&slippage=300&tokenIn=${tokenIn}&tokenOut=${tokenOut}&amountIn=${amountIn}&tokenInAmountToApprove=${amountIn}&toEoa=${toEoa}`,
+    `https://api.enso.finance/api/v1/shortcuts/route?chainId=${chainId}&fromAddress=${fromAddress}&slippage=300&tokenIn=${tokenIn}&tokenOut=${tokenOut}&amountIn=${amountIn}&spender=${spender}&receiver=${receiver}`,
     {
       headers: {
         Authorization: "Bearer 1e02632d-6feb-4a75-a157-documentation",
@@ -33,7 +37,7 @@ const approveDaiToAdai = async () => {
   );
 
   const balanceBefore = await utils.getTokenBalance(tokenOut, fromAddress);
-  await utils.approveToken(tokenIn, walletResponse.data.address, amountIn);
+  await utils.approveToken(tokenIn, walletAddress, amountIn);
   await signer.sendTransaction(response.data.tx);
   const balanceAfter = await utils.getTokenBalance(tokenOut, fromAddress);
 

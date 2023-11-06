@@ -14,7 +14,9 @@ const bundleRoutes = async () => {
   // this is the slippage we will set for all routes (can be set individually)
   const slippage = 300;
 
-  const walletResponse = await axios.get(
+  const {
+    data: { address: walletAddress },
+  } = await axios.get(
     `https://api.enso.finance/api/v1/wallet?chainId=${chainId}&fromAddress=${fromAddress}`
   );
 
@@ -23,7 +25,7 @@ const bundleRoutes = async () => {
   const weth = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
   const wethAmount = ethers.utils.parseEther("10").toString();
   const usdc = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48";
-  const usdcAmount = ethers.utils.parseUnits("1000", 6).toString();
+  const usdcAmount = ethers.utils.parseUnits("10", 6).toString();
 
   const b80bal20weth = "0x5c6Ee304399DBdB9C8Ef030aB642B10820DB8F56";
   const stecrv = "0x06325440D014e39736583c165C2963BA99fAf14E";
@@ -44,7 +46,7 @@ const bundleRoutes = async () => {
           amountIn: [balAmount, wethAmount],
           // for this example we will approve the required tokens prior to
           // executing the bundle of routes
-          tokenInAmountToApprove: [balAmount, wethAmount],
+          spender: fromAddress,
         },
       },
       {
@@ -64,10 +66,9 @@ const bundleRoutes = async () => {
           slippage,
           tokenIn: usdc,
           tokenOut: susdc,
-          amountIn: usdcAmount,
           // for this example we will top up the wallet by transferring required
           // erc20 to wallet to save gas compared to approving & transferring
-          tokenInAmountToTransfer: usdcAmount,
+          amountIn: usdcAmount,
         },
       },
     ],
@@ -80,54 +81,40 @@ const bundleRoutes = async () => {
 
   const b80bal20wethBefore = await utils.getTokenBalance(
     b80bal20weth,
-    walletResponse.data.address
+    walletAddress
   );
-  const stecrvBefore = await utils.getTokenBalance(
-    stecrv,
-    walletResponse.data.address
-  );
-  const susdcBefore = await utils.getTokenBalance(
-    susdc,
-    walletResponse.data.address
-  );
+  const stecrvBefore = await utils.getTokenBalance(stecrv, walletAddress);
+  const susdcBefore = await utils.getTokenBalance(susdc, walletAddress);
 
   // approving required tokens
-  await utils.approveToken(bal, walletResponse.data.address, balAmount);
-  await utils.approveToken(weth, walletResponse.data.address, wethAmount);
+  await utils.approveToken(bal, walletAddress, balAmount);
+  await utils.approveToken(weth, walletAddress, wethAmount);
   // transferring (topping up) required tokens
-  await utils.transferToken(usdc, walletResponse.data.address, usdcAmount);
+  await utils.transferToken(usdc, walletAddress, usdcAmount);
 
   await signer.sendTransaction(response.data.tx);
 
   const b80bal20wethAfter = await utils.getTokenBalance(
     b80bal20weth,
-    walletResponse.data.address
+    walletAddress
   );
-  const stecrvAfter = await utils.getTokenBalance(
-    stecrv,
-    walletResponse.data.address
-  );
-  const susdcAfter = await utils.getTokenBalance(
-    susdc,
-    walletResponse.data.address
-  );
+  const stecrvAfter = await utils.getTokenBalance(stecrv, walletAddress);
+  const susdcAfter = await utils.getTokenBalance(susdc, walletAddress);
 
   console.log(
-    `B-80BAL-20WETH balance for wallet ${
-      walletResponse.data.address
-    } of user ${fromAddress} increased by ${
+    `B-80BAL-20WETH balance for wallet ${walletAddress} of user ${fromAddress} increased by ${
       b80bal20wethAfter - b80bal20wethBefore
     }`
   );
   console.log(
-    `steCRV balance for wallet ${
-      walletResponse.data.address
-    } of user ${fromAddress} increased by ${stecrvAfter - stecrvBefore}`
+    `steCRV balance for wallet ${walletAddress} of user ${fromAddress} increased by ${
+      stecrvAfter - stecrvBefore
+    }`
   );
   console.log(
-    `S*USDC balance for wallet ${
-      walletResponse.data.address
-    } of user ${fromAddress} increased by ${susdcAfter - susdcBefore}`
+    `S*USDC balance for wallet ${walletAddress} of user ${fromAddress} increased by ${
+      susdcAfter - susdcBefore
+    }`
   );
 };
 

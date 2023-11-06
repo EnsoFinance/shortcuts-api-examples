@@ -18,9 +18,9 @@ const bundleRoutesUsingSafe = async () => {
   const slippage = 300;
 
   const usdt = "0xdac17f958d2ee523a2206206994597c13d831ec7";
-  const usdtAmount = ethers.utils.parseUnits("10", 6).toString();
+  const usdtAmount = ethers.utils.parseUnits("1", 6).toString();
   const eth = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
-  const ethAmount = ethers.utils.parseEther("0.1").toString();
+  const ethAmount = ethers.utils.parseEther("0.01").toString();
 
   const ausdt = "0x3ed3b47dd13ec9a98b44e6204a523e766b225811";
 
@@ -50,9 +50,9 @@ const bundleRoutesUsingSafe = async () => {
           tokenIn: usdt,
           tokenOut: ausdt,
           amountIn: usdtAmount,
-          // for this example we will transfer the required tokens prior to
+          // for this example we will approve the required tokens prior to
           // executing the bundle of routes
-          tokenInAmountToTransfer: usdtAmount,
+          spender: safeOwner,
         },
       },
     ],
@@ -65,7 +65,7 @@ const bundleRoutesUsingSafe = async () => {
 
   const ausdtBefore = await utils.getTokenBalance(ausdt, fromAddress);
 
-  await utils.transferToken(usdt, fromAddress, usdtAmount);
+  await utils.approveToken(usdt, fromAddress, usdtAmount);
 
   const safeSdk = await Safe.default.create({
     ethAdapter: new EthersAdapter({ ethers, signerOrProvider: signer }),
