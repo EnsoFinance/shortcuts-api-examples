@@ -1,5 +1,5 @@
 import axios from "axios";
-import utils from "../utils.js";
+import utils from "../../utils.js";
 
 // in this example, we will approve multiple erc20 to the wallet and execute a multi sided deposit route where we spend those erc20 tokens
 

@@ -12,6 +12,7 @@
   "dependencies": {
     "@safe-global/protocol-kit": "^1.2.0",
     "@safe-global/safe-core-sdk-types": "^2.2.0",
+    "@zerodevapp/sdk": "^3.2.10",
     "axios": "^1.4.0",
     "ethers": "^5.7.2"
   },

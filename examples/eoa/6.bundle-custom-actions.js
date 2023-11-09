@@ -1,5 +1,5 @@
 import axios from "axios";
-import utils from "../utils.js";
+import utils from "../../utils.js";
 import * as ethers from "ethers";
 
 // For even more advanced cases, you can bundle multiple *action* queries in a single transaction

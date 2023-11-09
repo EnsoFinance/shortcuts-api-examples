@@ -1,5 +1,5 @@
 import axios from "axios";
-import utils from "../utils.js";
+import utils from "../../utils.js";
 import Safe from "@safe-global/protocol-kit";
 import { EthersAdapter } from "@safe-global/protocol-kit";
 import * as ethers from "ethers";
