@@ -1,5 +1,5 @@
 import axios from "axios";
-import utils from "../utils.js";
+import utils from "../../utils.js";
 
 const ethToDai = async () => {
   // this is the address we want to run the transaction from
